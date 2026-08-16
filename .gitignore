@@ -35,11 +35,22 @@ jdbc/
 # Package, log, and runtime artifacts
 *.Rcheck/
 *.tar.gz
+*.tgz
 *.log
 *.pid
+*.sock
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.bak
+*.swp
 *.tmp
 *~
 
 # Operating-system files
 .DS_Store
 Thumbs.db
+__pycache__/
