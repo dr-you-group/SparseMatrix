@@ -27,6 +27,7 @@ services:
       SPARSE_MATRIX_CDM_DATABASE_SCHEMA: "${SPARSE_MATRIX_CDM_DATABASE_SCHEMA:-}"
       SPARSE_MATRIX_COHORT_DATABASE_SCHEMA: "${SPARSE_MATRIX_COHORT_DATABASE_SCHEMA:-}"
       SPARSE_MATRIX_COHORT_TABLE: "${SPARSE_MATRIX_COHORT_TABLE:-cohort}"
+      SPARSE_MATRIX_BATCH_SIZE: "${SPARSE_MATRIX_BATCH_SIZE:-1000000}"
     volumes:
       - /workspace/feature_extraction_v2:/home/rstudio/feature_extraction_v2
     working_dir: /home/rstudio/feature_extraction_v2

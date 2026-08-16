@@ -14,7 +14,8 @@ Set these variables before running the study:
 - `SPARSE_MATRIX_CDM_DATABASE_SCHEMA`: OMOP CDM schema.
 - `SPARSE_MATRIX_COHORT_DATABASE_SCHEMA`: writable cohort schema.
 
-`SPARSE_MATRIX_COHORT_TABLE` defaults to `cohort`.
+`SPARSE_MATRIX_COHORT_TABLE` defaults to `cohort`, and
+`SPARSE_MATRIX_BATCH_SIZE` defaults to `1000000`.
 
 ## Covariates
 

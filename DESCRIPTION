@@ -5,8 +5,8 @@ Version: 0.0.1
 Authors@R:
     person("Study", "Team", email = "study@example.org", role = c("aut", "cre"))
 Description: Creates study cohorts and patient-level covariates and converts the
-    persisted artifacts using PatientLevelPrediction's official sparse-matrix
-    implementation.
+    persisted artifacts into deterministic sparse matrices. Andromeda-backed
+    processing limits in-memory work while retaining the source identifier maps.
 License: Apache License (>= 2)
 Encoding: UTF-8
 Depends:
@@ -18,8 +18,8 @@ Imports:
     dplyr,
     FeatureExtraction,
     jsonlite,
+    Matrix,
     ParallelLogger,
-    PatientLevelPrediction (>= 6.6.0),
     rlang,
     SqlRender,
     utils
@@ -30,7 +30,6 @@ Remotes:
     OHDSI/DatabaseConnector,
     OHDSI/FeatureExtraction,
     OHDSI/ParallelLogger,
-    OHDSI/PatientLevelPrediction,
     OHDSI/SqlRender
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0

@@ -15,7 +15,8 @@ execute(
   createFeatures = TRUE,
   createSparseMatrix = TRUE,
   covariateSettingsFile = system.file("settings", "covariateSettings.json", package =
-    "SparseMatrix")
+    "SparseMatrix"),
+  sparseMatrixBatchSize = 1e+06
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ execute(
 \item{createSparseMatrix}{Create the sparse matrix?}
 
 \item{covariateSettingsFile}{FeatureExtraction settings JSON file.}
+
+\item{sparseMatrixBatchSize}{Number of feature rows processed per batch.}
 }
 \description{
 Execute the study

@@ -1,7 +1,7 @@
-test_that("createSparseMatrix uses PLP sparse-matrix mapping semantics", {
+test_that("createSparseMatrix maps covariates in bounded Andromeda batches", {
   skip_if_not_installed("Andromeda")
   skip_if_not_installed("FeatureExtraction")
-  skip_if_not_installed("PatientLevelPrediction")
+  skip_if_not_installed("Matrix")
 
   outputFolder <- tempfile("sparse-matrix-")
   dir.create(outputFolder)
@@ -34,9 +34,28 @@ test_that("createSparseMatrix uses PLP sparse-matrix mapping semantics", {
     file.path(outputFolder, "covariateData")
   )
 
-  createSparseMatrix(outputFolder = outputFolder)
+  originalBatchApply <- Andromeda::batchApply
+  batchCount <- 0L
+  testthat::local_mocked_bindings(
+    batchApply = function(tbl, fun, ..., batchSize = 1e6) {
+      countBatches <- function(batch, ...) {
+        batchCount <<- batchCount + 1L
+        fun(batch, ...)
+      }
+      originalBatchApply(
+        tbl,
+        countBatches,
+        ...,
+        batchSize = batchSize
+      )
+    },
+    .package = "Andromeda"
+  )
+
+  createSparseMatrix(outputFolder = outputFolder, batchSize = 2)
   result <- readRDS(file.path(outputFolder, "sparseMatrix.rds"))
 
+  expect_gt(batchCount, 1L)
   expect_named(
     result,
     c("dataMatrix", "labels", "covariateRef", "covariateMap"),
@@ -48,9 +67,9 @@ test_that("createSparseMatrix uses PLP sparse-matrix mapping semantics", {
     unname(as.matrix(result$dataMatrix)),
     matrix(c(0, 6, 0, 3, 0, 1.5, 0, 0, 5), nrow = 3, byrow = TRUE)
   )
-  expect_identical(names(result$labels), c("originalRowId", "rowId"))
-  expect_equal(result$labels$originalRowId, c(10, 20, 30))
+  expect_identical(names(result$labels), c("rowId", "originalRowId"))
   expect_equal(result$labels$rowId, 1:3)
+  expect_equal(result$labels$originalRowId, c(10, 20, 30))
   expect_equal(result$covariateMap$covariateId, c(100, 200, 300))
   expect_equal(result$covariateMap$columnId, 1:3)
 })

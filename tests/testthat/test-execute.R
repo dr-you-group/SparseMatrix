@@ -29,14 +29,16 @@ test_that("execute gates and orders the three study stages", {
       createCohorts = createCohorts,
       createFeatures = createFeatures,
       createSparseMatrix = createSparseMatrix,
-      covariateSettingsFile = settingsFile
+      covariateSettingsFile = settingsFile,
+      sparseMatrixBatchSize = 17
     )
   }
 
   run(TRUE, TRUE, TRUE)
   expect_identical(calls, c("cohorts", "features", "sparseMatrix"))
-  expect_identical(names(sparseArguments), "outputFolder")
+  expect_identical(names(sparseArguments), c("outputFolder", "batchSize"))
   expect_identical(sparseArguments$outputFolder, outputFolder)
+  expect_identical(sparseArguments$batchSize, 17)
 
   calls <- character()
   run(FALSE, FALSE, TRUE)

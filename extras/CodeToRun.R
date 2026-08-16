@@ -36,6 +36,10 @@ dir.create(settingsFolder, recursive = TRUE, showWarnings = FALSE)
 covariateSettingsFile <- file.path(settingsFolder, "covariateSettings.json")
 saveCovariateSettings(covariateSettingsArgs, covariateSettingsFile)
 
+sparseMatrixBatchSize <- as.numeric(
+  Sys.getenv("SPARSE_MATRIX_BATCH_SIZE", unset = "1000000")
+)
+
 execute(
   connectionDetails = connectionDetails,
   cdmDatabaseSchema = cdmDatabaseSchema,
@@ -46,7 +50,8 @@ execute(
   createCohorts = TRUE,
   createFeatures = TRUE,
   createSparseMatrix = TRUE,
-  covariateSettingsFile = covariateSettingsFile
+  covariateSettingsFile = covariateSettingsFile,
+  sparseMatrixBatchSize = sparseMatrixBatchSize
 )
 
 featureData <- FeatureExtraction::loadCovariateData(
@@ -81,6 +86,7 @@ Andromeda::batchApply(
     )
   },
   file = featureCsvFile,
+  batchSize = sparseMatrixBatchSize,
   progressBar = FALSE,
   safe = FALSE
 )

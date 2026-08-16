@@ -2,17 +2,19 @@
 % Please edit documentation in R/createSparseMatrix.R
 \name{createSparseMatrix}
 \alias{createSparseMatrix}
-\title{Create a PLP sparse matrix from saved FeatureExtraction data}
+\title{Create a sparse matrix from saved FeatureExtraction data}
 \usage{
-createSparseMatrix(outputFolder)
+createSparseMatrix(outputFolder, batchSize = 1e+06)
 }
 \arguments{
 \item{outputFolder}{Folder containing the saved `covariateData` artifact.}
+
+\item{batchSize}{Maximum number of mapped coordinates transferred per batch.}
 }
 \value{
 Invisibly returns the path to `sparseMatrix.rds`.
 }
 \description{
-Loads persisted FeatureExtraction data and converts it using
-\code{PatientLevelPrediction::toSparseM()}.
+Maps observed row and covariate identifiers to deterministic one-based
+indices, then transfers the mapped coordinates from Andromeda in batches.
 }

@@ -10,6 +10,7 @@
 #' @param createFeatures Extract and save patient-level features?
 #' @param createSparseMatrix Create the sparse matrix?
 #' @param covariateSettingsFile FeatureExtraction settings JSON file.
+#' @param sparseMatrixBatchSize Number of feature rows processed per batch.
 #'
 #' @importFrom dplyr %>%
 #' @importFrom rlang .data
@@ -28,7 +29,8 @@ execute <- function(connectionDetails,
                       "settings",
                       "covariateSettings.json",
                       package = "SparseMatrix"
-                    )) {
+                    ),
+                    sparseMatrixBatchSize = 1e6) {
   if (!file.exists(outputFolder)) {
     dir.create(outputFolder, recursive = TRUE)
   }
@@ -69,7 +71,8 @@ execute <- function(connectionDetails,
 
   if (createSparseMatrix) {
     ParallelLogger::logInfo("Creating sparse matrix")
-    createSparseMatrix(outputFolder = outputFolder)
+    createSparseMatrix(outputFolder = outputFolder,
+                       batchSize = sparseMatrixBatchSize)
   }
 
   invisible(NULL)
