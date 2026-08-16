@@ -1,0 +1,16 @@
+^\.git$
+^\.gitignore$
+^\.agents$
+^\.codex$
+^\.dockerignore$
+^\.env$
+^\.env\.example$
+^.*\.Rproj$
+^\.Rproj\.user$
+^compose\.yaml$
+^docker$
+^extras$
+^FeatureExtractionExample\.R$
+^SETTINGS\.md$
+^jdbc$
+^scripts$

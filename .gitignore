@@ -1,0 +1,45 @@
+# Credentials and machine-local configuration
+.env
+.env.*
+!/.env.example
+.Renviron
+.Renviron.*
+!/.Renviron.example
+
+# R and IDE session files
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rproj
+Rplots.pdf
+*.Rout
+
+# Local agent state
+.agents/
+.codex/
+
+# Generated study data and database artifacts
+data/
+output/
+jdbc/
+*.jar
+*.zip
+*.rds
+*.sqlite*
+*.duckdb*
+*.parquet
+*.feather
+*.fst
+
+# Package, log, and runtime artifacts
+*.Rcheck/
+*.tar.gz
+*.log
+*.pid
+*.tmp
+*~
+
+# Operating-system files
+.DS_Store
+Thumbs.db
