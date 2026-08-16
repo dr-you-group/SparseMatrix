@@ -1,0 +1,45 @@
+FROM rocker/tidyverse:4.6.1@sha256:9a5dd05d5318b9fc1ee1797d39095025185742a4062b4167db006611a0999b9b
+
+USER root
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+      curl \
+      openjdk-21-jdk-headless \
+    && rm -rf /var/lib/apt/lists/* \
+    && R CMD javareconf
+
+RUN install2.r --error --ncpus -1 \
+      --repos https://p3m.dev/cran/__linux__/noble/2026-08-14 \
+      Andromeda \
+      bit64 \
+      CirceR \
+      CohortGenerator \
+      CohortMethod \
+      DatabaseConnector \
+      duckdb \
+      Eunomia \
+      FeatureExtraction \
+      Matrix \
+      openxlsx \
+      PatientLevelPrediction \
+      remotes \
+      testthat \
+    && Rscript -e 'remotes::install_github("OHDSI/ROhdsiWebApi@455c81633de6d68dcd675ddb31f471c66e8fa332", dependencies = FALSE, upgrade = "never", build_vignettes = FALSE)' \
+    && Rscript -e 'expected <- c(Andromeda="1.2.1", bit64="4.8.2", CirceR="1.3.3", CohortGenerator="1.1.1", CohortMethod="6.0.3", DatabaseConnector="7.2.0", duckdb="1.5.5", Eunomia="2.1.0", FeatureExtraction="3.14.0", Matrix="1.7-6", PatientLevelPrediction="6.6.0", ROhdsiWebApi="1.3.3", testthat="3.3.2"); observed <- vapply(names(expected), function(package) utils::packageDescription(package)$Version, character(1)); stopifnot(identical(observed, expected)); library(rJava); .jinit(); cat("JAVA_AND_PACKAGE_CHECK=OK\n")'
+
+COPY docker/rsession.conf /etc/rstudio/rsession.conf
+COPY docker/rserver.conf /etc/rstudio/rserver.conf
+
+RUN /usr/lib/rstudio-server/bin/rserver --verify-installation=1
+
+COPY . /tmp/SparseMatrix
+RUN R CMD INSTALL /tmp/SparseMatrix \
+    && rm -rf /tmp/SparseMatrix
+
+WORKDIR /home/rstudio/feature_extraction_v2
+
+HEALTHCHECK --interval=10s --timeout=5s --start-period=20s --retries=12 \
+  CMD curl -fsS http://localhost:8787/ >/dev/null || exit 1
+
+CMD ["/init"]
