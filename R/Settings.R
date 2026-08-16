@@ -1,32 +1,31 @@
+#' Save FeatureExtraction settings
+#'
+#' @param covariateSettingsArgs Arguments for
+#'   [FeatureExtraction::createCovariateSettings()].
+#' @param file Destination JSON file.
+#'
+#' @export
 saveCovariateSettings <- function(covariateSettingsArgs, file) {
-  checkmate::assertList(covariateSettingsArgs)
-  checkmate::assertCharacter(file, len = 1)
-  
   do.call(
     FeatureExtraction::createCovariateSettings,
     covariateSettingsArgs
   )
-  
-  json <- jsonlite::toJSON(
-    covariateSettingsArgs,
-    auto_unbox = TRUE,
-    pretty = TRUE
+  if (!file.exists(dirname(file))) {
+    dir.create(dirname(file), recursive = TRUE)
+  }
+  writeLines(
+    jsonlite::toJSON(covariateSettingsArgs, auto_unbox = TRUE, pretty = TRUE),
+    file
   )
-  
-  writeLines(json, file)
+  invisible(NULL)
 }
 
+#' Load FeatureExtraction settings
+#'
+#' @param file JSON file created by [saveCovariateSettings()].
+#'
+#' @export
 loadCovariateSettings <- function(file) {
-  checkmate::assertCharacter(file, len = 1)
-  checkmate::assertFileExists(file)
-  
-  args <- jsonlite::fromJSON(
-    file,
-    simplifyDataFrame = FALSE
-  )
-  
-  do.call(
-    FeatureExtraction::createCovariateSettings,
-    args
-  )
+  args <- jsonlite::fromJSON(file, simplifyDataFrame = FALSE)
+  do.call(FeatureExtraction::createCovariateSettings, args)
 }

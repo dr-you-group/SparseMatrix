@@ -1,0 +1,36 @@
+Package: SparseMatrix
+Type: Package
+Title: Build Sparse Matrices from OHDSI Cohort Features
+Version: 0.0.1
+Authors@R:
+    person("Study", "Team", email = "study@example.org", role = c("aut", "cre"))
+Description: Creates study cohorts and patient-level covariates and converts the
+    persisted artifacts using PatientLevelPrediction's official sparse-matrix
+    implementation.
+License: Apache License (>= 2)
+Encoding: UTF-8
+Depends:
+    R (>= 4.0.0)
+Imports:
+    Andromeda,
+    checkmate,
+    DatabaseConnector,
+    dplyr,
+    FeatureExtraction,
+    jsonlite,
+    ParallelLogger,
+    PatientLevelPrediction (>= 6.6.0),
+    rlang,
+    SqlRender,
+    utils
+Suggests:
+    testthat (>= 3.1.6)
+Remotes:
+    OHDSI/Andromeda,
+    OHDSI/DatabaseConnector,
+    OHDSI/FeatureExtraction,
+    OHDSI/ParallelLogger,
+    OHDSI/PatientLevelPrediction,
+    OHDSI/SqlRender
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0
