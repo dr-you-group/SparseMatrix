@@ -1,0 +1,6 @@
+{
+  "useDemographicsGender": true,
+  "useDemographicsAge": true,
+  "useConditionOccurrenceAnyTimePrior": true,
+  "useDrugExposureAnyTimePrior": true
+}
