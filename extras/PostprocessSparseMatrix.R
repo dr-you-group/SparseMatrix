@@ -26,11 +26,11 @@ featureCoordinates <- featureCoordinates |>
   dplyr::arrange(rowId, covariateId)
 
 featureCsvFile <- file.path(outputFolder, "featureExtractionLong.csv")
-writeLines("patientId,covariateId,covariateValue", featureCsvFile)
+writeLines("rowId,covariateId,covariateValue", featureCsvFile)
 Andromeda::batchApply(
   featureCoordinates,
   function(batch, file) {
-    names(batch)[1] <- "patientId"
+    names(batch)[1] <- "rowId"
     utils::write.table(
       batch,
       file = file,
