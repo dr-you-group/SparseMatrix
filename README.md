@@ -28,6 +28,19 @@ How to run
    private:
 
    ```sh
+   EXAMPLE .env file:
+    FEATURE_EXTRACTION_V2_RSTUDIO_PASSWORD='xxx'
+    SPARSE_MATRIX_DB_SERVER='xx.xx.xx.xx'
+    SPARSE_MATRIX_DB_PORT='1433'
+    SPARSE_MATRIX_DB_USER='sa'
+    SPARSE_MATRIX_DB_PASSWORD='xxx'
+    SPARSE_MATRIX_CDM_DATABASE_SCHEMA='xxx.CDM'
+    SPARSE_MATRIX_COHORT_DATABASE_SCHEMA='cohortdb.xxx'
+    SPARSE_MATRIX_COHORT_TABLE='xxx'
+    SPARSE_MATRIX_BATCH_SIZE='1000000'
+   ```
+
+   ```sh
    cp .env.example .env
    chmod 600 .env
    ```
@@ -39,7 +52,7 @@ How to run
    ```sh
    docker compose up -d --force-recreate rstudio
    ```
-2. Build and start Web RStudio:
+3. Build and start Web RStudio:
 
    ```sh
    docker compose up -d --build rstudio
@@ -53,10 +66,10 @@ How to run
    scripts/rstudio-28787-proxy-control.sh start
    scripts/rstudio-28787-proxy-control.sh status
    ```
-3. Open the project in RStudio. If the covariates need to be changed, edit and
+4. Open the project in RStudio. If the covariates need to be changed, edit and
    run `extras/CreateCovariateSettings.R`. Then select **Build** and **Install
    and Restart** so the current R functions, SQL, and settings are installed.
-4. Run the study using `extras/CodeToRun.R`. Its essential configuration and
+5. Run the study using `extras/CodeToRun.R`. Its essential configuration and
    stage call are shown below:
 
    ```r
@@ -104,7 +117,7 @@ How to run
    The cohort stage drops and recreates the entire configured cohort table.
    Always use a study-specific writable table. Set an individual stage flag to
    `FALSE` only when its required artifact already exists.
-5. Optionally create the patient-level long-format CSV and print a validated
+6. Optionally create the patient-level long-format CSV and print a validated
    sparse-matrix summary:
 
    ```r
