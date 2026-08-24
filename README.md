@@ -13,12 +13,22 @@ Requirements
 - Read access to the CDM and vocabulary tables, plus permission to create and
   drop the configured study cohort table.
 - R 4.0.0 or newer and Java with a compatible Microsoft SQL Server JDBC driver.
+  R package dependencies are declared in `DESCRIPTION`.
 - Docker with Docker Compose when using the included Web RStudio environment.
 - Enough local disk space for Andromeda temporary data and study artifacts, and
-  enough memory for the final sparse matrix. (experimented on virtual environment with 12 core, 128 gb RAM on Ubuntu)
+  enough memory for the final sparse matrix.
 
-The included container uses R 4.6.1, OpenJDK 21, and Web RStudio on port
-`28787`.
+The current tested environment uses:
+
+- Microsoft SQL Server `16.0.1000.6` RTM, Developer Edition (64-bit).
+- R `4.6.1` and RStudio Server `2026.07.1+147` (Pacific Dogwood).
+- OpenJDK `21.0.11` and Microsoft JDBC Driver for SQL Server `9.2.0`.
+- Andromeda `1.2.1`, DatabaseConnector `7.2.0`, FeatureExtraction `3.14.0`,
+  Matrix `1.7.6`, ParallelLogger `3.5.1`, and SqlRender `1.19.6`.
+- checkmate `2.3.4`, dplyr `1.2.1`, jsonlite `2.0.0`, and rlang `1.3.0`.
+
+The project has been exercised in an Ubuntu virtual environment with 12 CPU
+cores and 128 GB of RAM. The included Web RStudio service uses port `28787`.
 
 How to run
 ==========
@@ -28,21 +38,22 @@ How to run
    private:
 
    ```sh
-   EXAMPLE .env file:
-    FEATURE_EXTRACTION_V2_RSTUDIO_PASSWORD='xxx'
-    SPARSE_MATRIX_DB_SERVER='xx.xx.xx.xx'
-    SPARSE_MATRIX_DB_PORT='1433'
-    SPARSE_MATRIX_DB_USER='sa'
-    SPARSE_MATRIX_DB_PASSWORD='xxx'
-    SPARSE_MATRIX_CDM_DATABASE_SCHEMA='xxx.CDM'
-    SPARSE_MATRIX_COHORT_DATABASE_SCHEMA='cohortdb.xxx'
-    SPARSE_MATRIX_COHORT_TABLE='xxx'
-    SPARSE_MATRIX_BATCH_SIZE='1000000'
-   ```
-
-   ```sh
    cp .env.example .env
    chmod 600 .env
+   ```
+
+   Use site-specific values following this structure:
+
+   ```dotenv
+   FEATURE_EXTRACTION_V2_RSTUDIO_PASSWORD='change-me'
+   SPARSE_MATRIX_DB_SERVER='sql-server.example.org'
+   SPARSE_MATRIX_DB_PORT='1433'
+   SPARSE_MATRIX_DB_USER='database-user'
+   SPARSE_MATRIX_DB_PASSWORD='change-me'
+   SPARSE_MATRIX_CDM_DATABASE_SCHEMA='database.schema'
+   SPARSE_MATRIX_COHORT_DATABASE_SCHEMA='database.schema'
+   SPARSE_MATRIX_COHORT_TABLE='cohort'
+   SPARSE_MATRIX_BATCH_SIZE='1000000'
    ```
 
    Place a compatible Microsoft SQL Server JDBC driver in `jdbc/`. If `.env`
@@ -52,7 +63,8 @@ How to run
    ```sh
    docker compose up -d --force-recreate rstudio
    ```
-3. Build and start Web RStudio:
+
+2. Build and start Web RStudio:
 
    ```sh
    docker compose up -d --build rstudio
@@ -66,10 +78,12 @@ How to run
    scripts/rstudio-28787-proxy-control.sh start
    scripts/rstudio-28787-proxy-control.sh status
    ```
-4. Open the project in RStudio. If the covariates need to be changed, edit and
+
+3. Open the project in RStudio. If the covariates need to be changed, edit and
    run `extras/CreateCovariateSettings.R`. Then select **Build** and **Install
    and Restart** so the current R functions, SQL, and settings are installed.
-5. Run the study using `extras/CodeToRun.R`. Its essential configuration and
+
+4. Run the study using `extras/CodeToRun.R`. Its essential configuration and
    stage call are shown below:
 
    ```r
@@ -117,7 +131,8 @@ How to run
    The cohort stage drops and recreates the entire configured cohort table.
    Always use a study-specific writable table. Set an individual stage flag to
    `FALSE` only when its required artifact already exists.
-6. Optionally create the patient-level long-format CSV and print a validated
+
+5. Optionally create the patient-level long-format CSV and print a validated
    sparse-matrix summary:
 
    ```r
@@ -132,7 +147,7 @@ Output
 
 The main runner writes these files under `SPARSE_MATRIX_OUTPUT_FOLDER`:
 
-- `CohortCounts.csv`: number of subjects in each configured cohort.
+- `CohortCounts.csv`: number of rows in each configured cohort.
 - `covariateData`: persisted FeatureExtraction CovariateData backed by
   Andromeda.
 - `sparseMatrix.rds`: the mapped sparse-matrix result.
@@ -146,7 +161,8 @@ The main runner writes these files under `SPARSE_MATRIX_OUTPUT_FOLDER`:
 contains:
 
 - `dataMatrix`: a `Matrix::dgCMatrix` without dimension names.
-- `labels`: the one-based matrix `rowId` and its source `originalRowId`.
+- `labels`: the one-based matrix `rowId` and its source cohort `subject_id` as
+  `originalRowId`.
 - `covariateRef`: FeatureExtraction metadata for the observed covariates.
 - `covariateMap`: the deterministic `covariateId` to `columnId` mapping.
 
@@ -181,8 +197,7 @@ SparseMatrix/
 │   │   └── covariateSettings.json      # Packaged FeatureExtraction settings
 │   └── sql/sql_server/
 │       ├── CreateCohortTable.sql       # Recreates the SQL Server cohort table
-│       └── LLT_HTE_moderate_intensity_statin_with_ezetimibe_v2.sql
-│                                         # ATLAS-generated cohort definition SQL
+│       └── LLT_HTE_moderate_intensity_statin_with_ezetimibe_v2.sql  # ATLAS cohort SQL
 ├── extras/
 │   ├── CodeToRun.R                     # Environment-driven end-to-end runner
 │   ├── CreateCovariateSettings.R       # Regenerates packaged covariate settings
@@ -218,7 +233,7 @@ SparseMatrix/
 ```
 
 License
-=======
+========
 
 The SparseMatrix package is licensed under the Apache License 2.0.
 
