@@ -20,12 +20,14 @@ Requirements
 
 The current tested environment uses:
 
-- Microsoft SQL Server `16.0.1000.6` RTM, Developer Edition (64-bit).
-- R `4.6.1` and RStudio Server `2026.07.1+147` (Pacific Dogwood).
+- Microsoft SQL Server `16.0.1000.6` (64-bit).
+- R `4.6.1`.
 - OpenJDK `21.0.11` and Microsoft JDBC Driver for SQL Server `9.2.0`.
-- Andromeda `1.2.1`, DatabaseConnector `7.2.0`, FeatureExtraction `3.14.0`,
-  Matrix `1.7.6`, ParallelLogger `3.5.1`, and SqlRender `1.19.6`.
-- checkmate `2.3.4`, dplyr `1.2.1`, jsonlite `2.0.0`, and rlang `1.3.0`.
+- Andromeda `1.2.1`
+- DatabaseConnector `7.2.0`
+- FeatureExtraction `3.14.0`,
+- Matrix `1.7.6`
+- ParallelLogger `3.5.1`, and SqlRender `1.19.6`.
 
 The project has been exercised in an Ubuntu virtual environment with 12 CPU
 cores and 128 GB of RAM. The included Web RStudio service uses port `28787`.
