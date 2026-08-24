@@ -10,12 +10,11 @@ outputFolder <- Sys.getenv("SPARSE_MATRIX_OUTPUT_FOLDER")
 
 # SQL Server connection details. Keep credentials in environment variables.
 connectionDetails <- DatabaseConnector::createConnectionDetails(
-  dbms = Sys.getenv("SPARSE_MATRIX_DB"),
+  dbms = "sql server",
   server = Sys.getenv("SPARSE_MATRIX_DB_SERVER"),
   user = Sys.getenv("SPARSE_MATRIX_DB_USER"),
   password = Sys.getenv("SPARSE_MATRIX_DB_PASSWORD"),
-  port = Sys.getenv("SPARSE_MATRIX_DB_PORT"),
-  pathToDriver = Sys.getenv("SPARSE_MATRIX_PATH_TO_DRIVER")
+  port = Sys.getenv("SPARSE_MATRIX_DB_PORT")
 )
 
 # OMOP CDM and study cohort locations.
