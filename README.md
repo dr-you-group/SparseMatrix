@@ -182,11 +182,6 @@ because the study uses them, but they are excluded from Git.
 
 ```text
 SparseMatrix/
-├── DESCRIPTION                         # R package metadata and dependencies
-├── NAMESPACE                           # Generated exports and imports
-├── README.md                           # Installation, execution, and output guide
-├── SETTINGS.md                         # Additional environment and covariate notes
-├── FeatureExtractionExample.R          # Original sparse-conversion reference example
 ├── R/
 │   ├── Main.R                          # Orchestrates cohort, feature, and matrix stages
 │   ├── Settings.R                      # Reads and writes covariate-settings JSON
@@ -200,38 +195,10 @@ SparseMatrix/
 │   └── sql/sql_server/
 │       ├── CreateCohortTable.sql       # Recreates the SQL Server cohort table
 │       └── LLT_HTE_moderate_intensity_statin_with_ezetimibe_v2.sql  # ATLAS cohort SQL
-├── extras/
-│   ├── CodeToRun.R                     # Environment-driven end-to-end runner
-│   ├── CreateCovariateSettings.R       # Regenerates packaged covariate settings
-│   └── PostprocessSparseMatrix.R       # Writes long CSV and validates matrix output
-├── man/
-│   ├── createCohorts.Rd                # createCohorts API documentation
-│   ├── createFeatures.Rd               # createFeatures API documentation
-│   ├── createSparseMatrix.Rd           # createSparseMatrix API documentation
-│   ├── execute.Rd                      # execute API documentation
-│   ├── loadCovariateSettings.Rd        # Settings-loader documentation
-│   └── saveCovariateSettings.Rd        # Settings-writer documentation
-├── tests/
-│   ├── testthat.R                      # Package test entry point
-│   └── testthat/
-│       ├── test-createSparseMatrix.R   # Andromeda batching and mapping contract test
-│       └── test-execute.R              # Pipeline flag and stage-order test
-├── docker/
-│   ├── Dockerfile.rstudio              # Pinned R, Java, OHDSI, and RStudio image
-│   ├── rserver.conf                    # RStudio Server R executable setting
-│   └── rsession.conf                   # Default RStudio project directory
-├── scripts/
-│   ├── rstudio-28787-proxy.py          # Relays remote-Docker RStudio traffic
-│   └── rstudio-28787-proxy-control.sh  # Starts, stops, and checks the relay
-├── jdbc/                               # Local SQL Server JDBC driver files (ignored)
-├── data/                               # Andromeda and DuckDB temporary data (ignored)
-├── output/                             # Cohort, feature, matrix, and log artifacts (ignored)
-├── compose.yaml                        # Web RStudio service on port 28787
-├── .env.example                        # Environment-variable template without secrets
-├── .env                                # Local credentials and site settings (ignored)
-├── .gitignore                          # Git runtime-artifact exclusions
-├── .dockerignore                       # Docker build-context exclusions
-└── .Rbuildignore                       # R package-build exclusions
+└── extras/
+    ├── CodeToRun.R                     # Environment-driven end-to-end runner
+    ├── CreateCovariateSettings.R       # Regenerates packaged covariate settings
+    └── PostprocessSparseMatrix.R       # Writes long CSV and validates matrix output
 ```
 
 License
