@@ -48,7 +48,7 @@ How to run
 
    ```dotenv
    FEATURE_EXTRACTION_V2_RSTUDIO_PASSWORD='change-me'
-   SPARSE_MATRIX_DB_SERVER='sql-server.example.org'
+   SPARSE_MATRIX_DB_SERVER='sql server'
    SPARSE_MATRIX_DB_PORT='1433'
    SPARSE_MATRIX_DB_USER='database-user'
    SPARSE_MATRIX_DB_PASSWORD='change-me'
@@ -58,8 +58,8 @@ How to run
    SPARSE_MATRIX_BATCH_SIZE='1000000'
    ```
 
-   Place a compatible Microsoft SQL Server JDBC driver in `jdbc/`. If `.env`
-   is changed after the container has been created, recreate the service so the
+   Place a compatible JDBC driver in `jdbc/`. For arguments used in createConnectionDetails(), see the (https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html).
+   If `.env` is changed after the container has been created, recreate the service so the
    new values are injected:
 
    ```sh
@@ -84,6 +84,45 @@ How to run
 3. Open the project in RStudio. If the covariates need to be changed, edit and
    run `extras/CreateCovariateSettings.R`. Then select **Build** and **Install
    and Restart** so the current R functions, SQL, and settings are installed.
+
+### Covariate settings
+
+To configure the covariates used for feature extraction, edit and run
+`extras/CreateCovariateSettings.R`.
+
+```r
+covariateSettingsArgs <- list(
+  useDemographicsGender = TRUE,
+  useDemographicsAge = TRUE,
+  useConditionOccurrenceLongTerm = TRUE,
+  useDrugExposureLongTerm = TRUE,
+  useProcedureOccurrenceLongTerm = TRUE,
+  useMeasurementLongTerm = TRUE,
+  longTermStartDays = -365,
+  mediumTermStartDays = -180,
+  shortTermStartDays = -30,
+  endDays = 0,
+  includedCovariateConceptIds = c(),
+  addDescendantsToInclude = FALSE,
+  excludedCovariateConceptIds = c(),
+  addDescendantsToExclude = FALSE,
+  includedCovariateIds = c()
+)
+
+settingsFolder <- file.path(getwd(), "inst/settings")
+if (!file.exists(settingsFolder)) {
+  dir.create(settingsFolder, recursive = TRUE, showWarnings = FALSE)
+}
+
+covariateSettingsFile <- file.path(settingsFolder, "covariateSettings.json")
+saveCovariateSettings(covariateSettingsArgs, covariateSettingsFile)
+```
+
+The settings are saved to `inst/settings/covariateSettings.json` and included
+with the package.
+
+For the available covariate arguments, see the
+[FeatureExtraction `createCovariateSettings()` reference](https://ohdsi.github.io/FeatureExtraction/reference/createCovariateSettings.html).
 
 4. Run the study using `extras/CodeToRun.R`. Its essential configuration and
    stage call are shown below:

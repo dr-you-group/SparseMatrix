@@ -1,6 +1,17 @@
 {
   "useDemographicsGender": true,
   "useDemographicsAge": true,
-  "useConditionOccurrenceAnyTimePrior": true,
-  "useDrugExposureAnyTimePrior": true
+  "useConditionOccurrenceLongTerm": true,
+  "useDrugExposureLongTerm": true,
+  "useProcedureOccurrenceLongTerm": true,
+  "useMeasurementLongTerm": true,
+  "longTermStartDays": -365,
+  "mediumTermStartDays": -180,
+  "shortTermStartDays": -30,
+  "endDays": 0,
+  "includedCovariateConceptIds": {},
+  "addDescendantsToInclude": false,
+  "excludedCovariateConceptIds": {},
+  "addDescendantsToExclude": false,
+  "includedCovariateIds": {}
 }

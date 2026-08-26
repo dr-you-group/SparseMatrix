@@ -4,8 +4,19 @@ library(SparseMatrix)
 covariateSettingsArgs <- list(
   useDemographicsGender = TRUE,
   useDemographicsAge = TRUE,
-  useConditionOccurrenceAnyTimePrior = TRUE,
-  useDrugExposureAnyTimePrior = TRUE
+  useConditionOccurrenceLongTerm = TRUE,
+  useDrugExposureLongTerm = TRUE,
+  useProcedureOccurrenceLongTerm = TRUE,
+  useMeasurementLongTerm = TRUE,
+  longTermStartDays = -365,
+  mediumTermStartDays = -180,
+  shortTermStartDays = -30,
+  endDays = 0,
+  includedCovariateConceptIds = c(),
+  addDescendantsToInclude = FALSE,
+  excludedCovariateConceptIds = c(),
+  addDescendantsToExclude = FALSE,
+  includedCovariateIds = c()
 )
 
 settingsFolder <- file.path(getwd(), "inst/settings")
