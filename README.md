@@ -85,45 +85,44 @@ How to run
    run `extras/CreateCovariateSettings.R`. Then select **Build** and **Install
    and Restart** so the current R functions, SQL, and settings are installed.
 
-### Covariate settings
+   **Covariate settings**
 
-To configure the covariates used for feature extraction, edit and run
-`extras/CreateCovariateSettings.R`.
+   To configure the covariates used for feature extraction, edit and run
+   `extras/CreateCovariateSettings.R`.
 
-```r
-covariateSettingsArgs <- list(
-  useDemographicsGender = TRUE,
-  useDemographicsAge = TRUE,
-  useConditionOccurrenceLongTerm = TRUE,
-  useDrugExposureLongTerm = TRUE,
-  useProcedureOccurrenceLongTerm = TRUE,
-  useMeasurementLongTerm = TRUE,
-  longTermStartDays = -365,
-  mediumTermStartDays = -180,
-  shortTermStartDays = -30,
-  endDays = 0,
-  includedCovariateConceptIds = c(),
-  addDescendantsToInclude = FALSE,
-  excludedCovariateConceptIds = c(),
-  addDescendantsToExclude = FALSE,
-  includedCovariateIds = c()
-)
+   ```r
+   covariateSettingsArgs <- list(
+     useDemographicsGender = TRUE,
+     useDemographicsAge = TRUE,
+     useConditionOccurrenceLongTerm = TRUE,
+     useDrugExposureLongTerm = TRUE,
+     useProcedureOccurrenceLongTerm = TRUE,
+     useMeasurementLongTerm = TRUE,
+     longTermStartDays = -365,
+     mediumTermStartDays = -180,
+     shortTermStartDays = -30,
+     endDays = 0,
+     includedCovariateConceptIds = c(),
+     addDescendantsToInclude = FALSE,
+     excludedCovariateConceptIds = c(),
+     addDescendantsToExclude = FALSE,
+     includedCovariateIds = c()
+   )
 
-settingsFolder <- file.path(getwd(), "inst/settings")
-if (!file.exists(settingsFolder)) {
-  dir.create(settingsFolder, recursive = TRUE, showWarnings = FALSE)
-}
+   settingsFolder <- file.path(getwd(), "inst/settings")
+   if (!file.exists(settingsFolder)) {
+     dir.create(settingsFolder, recursive = TRUE, showWarnings = FALSE)
+   }
 
-covariateSettingsFile <- file.path(settingsFolder, "covariateSettings.json")
-saveCovariateSettings(covariateSettingsArgs, covariateSettingsFile)
-```
+   covariateSettingsFile <- file.path(settingsFolder, "covariateSettings.json")
+   saveCovariateSettings(covariateSettingsArgs, covariateSettingsFile)
+   ```
 
-The settings are saved to `inst/settings/covariateSettings.json` and included
-with the package.
+   The settings are saved to `inst/settings/covariateSettings.json` and included
+   with the package.
 
-For the available covariate arguments, see the
-[FeatureExtraction `createCovariateSettings()` reference](https://ohdsi.github.io/FeatureExtraction/reference/createCovariateSettings.html).
-
+   For the available covariate arguments, see the
+   [FeatureExtraction `createCovariateSettings()` reference](https://ohdsi.github.io/FeatureExtraction/reference/createCovariateSettings.html).
 4. Run the study using `extras/CodeToRun.R`. Its essential configuration and
    stage call are shown below:
 
