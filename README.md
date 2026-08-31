@@ -18,16 +18,19 @@ Requirements
 - Enough local disk space for Andromeda temporary data and study artifacts, and
   enough memory for the final sparse matrix.
 
-The current tested environment uses:
+The current Docker environment uses:
 
 - Microsoft SQL Server `16.0.1000.6` (64-bit).
-- R `4.6.1`.
-- OpenJDK `21.0.11` and Microsoft JDBC Driver for SQL Server `9.2.0`.
-- Andromeda `1.2.1`
-- DatabaseConnector `7.2.0`
-- FeatureExtraction `3.14.0`,
-- Matrix `1.7.6`
-- ParallelLogger `3.5.1`, and SqlRender `1.19.6`.
+- R `4.1.2` from `rocker/rstudio:4.1.2`.
+- OpenJDK from the distribution `default-jdk` package (not pinned).
+- Microsoft JDBC Driver for SQL Server `8.4.1`, downloaded by DatabaseConnector `5.0.2`.
+- Andromeda `0.6.0`.
+- DatabaseConnector `5.0.2`.
+- CohortGenerator `0.4.0`.
+- FeatureExtraction `3.2.0`.
+- Matrix from the configured R package repository (not pinned).
+- ParallelLogger `2.0.2`.
+- SqlRender `1.9.0`.
 
 The project has been exercised in an Ubuntu virtual environment with 12 CPU
 cores and 128 GB of RAM. The included Web RStudio service uses port `28787`.
@@ -35,55 +38,26 @@ cores and 128 GB of RAM. The included Web RStudio service uses port `28787`.
 How to run
 ==========
 
-1. Copy the environment template and enter the RStudio password, database
-   connection, schema, cohort-table, and batch-size settings. Keep `.env`
-   private:
+1. Build Docker image, by entering the following command in a shell: (takes about ~5 minutes on fresh start)
 
-   ```sh
-   cp .env.example .env
-   chmod 600 .env
-   ```
+```sh
+   docker build -f .\DockerImage\Dockerfile -t sparsematrix:latest .
+```
 
-   Use site-specific values following this structure:
+2. Run docker container:
 
-   ```dotenv
-   FEATURE_EXTRACTION_V2_RSTUDIO_PASSWORD='change-me'
-   SPARSE_MATRIX_DB_SERVER='sql server'
-   SPARSE_MATRIX_DB_PORT='1433'
-   SPARSE_MATRIX_DB_USER='database-user'
-   SPARSE_MATRIX_DB_PASSWORD='change-me'
-   SPARSE_MATRIX_CDM_DATABASE_SCHEMA='database.schema'
-   SPARSE_MATRIX_COHORT_DATABASE_SCHEMA='database.schema'
-   SPARSE_MATRIX_COHORT_TABLE='cohort'
-   SPARSE_MATRIX_BATCH_SIZE='1000000'
-   ```
+```sh
+   $projectPath = (Get-Location).Path
 
-   Place a compatible JDBC driver in `jdbc/`. For arguments used in createConnectionDetails(), see the (https://ohdsi.github.io/DatabaseConnector/reference/createConnectionDetails.html).
-   If `.env` is changed after the container has been created, recreate the service so the
-   new values are injected:
+   docker run -d --name sparsematrix-rstudio `              
+   -p 127.0.0.1:8787:8787 `
+   -e PASSWORD='password' `
+   --mount "type=bind,source=$projectPath,target=/home/rstudio/SparseMatrix" `
+   -w /home/rstudio/SparseMatrix `
+   sparsematrix:latest
+```
 
-   ```sh
-   docker compose up -d --force-recreate rstudio
-   ```
-
-2. Build and start Web RStudio:
-
-   ```sh
-   docker compose up -d --build rstudio
-   ```
-
-   Open `http://localhost:28787` and sign in as `rstudio` using
-   `FEATURE_EXTRACTION_V2_RSTUDIO_PASSWORD`. When Docker runs on the configured
-   remote host, the included relay can be managed with:
-
-   ```sh
-   scripts/rstudio-28787-proxy-control.sh start
-   scripts/rstudio-28787-proxy-control.sh status
-   ```
-
-3. Open the project in RStudio. If the covariates need to be changed, edit and
-   run `extras/CreateCovariateSettings.R`. Then select **Build** and **Install
-   and Restart** so the current R functions, SQL, and settings are installed.
+3. After container run, enter ``localhost:8787`` on a web brower and enter ID: `rstudio`, PW: `password` to access to R studio. `File -> Open Project -> Go To SparseMatrix/SparseMatrix.Rproj` to open the project.
 
    **Covariate settings**
 
@@ -123,8 +97,9 @@ How to run
 
    For the available covariate arguments, see the
    [FeatureExtraction `createCovariateSettings()` reference](https://ohdsi.github.io/FeatureExtraction/reference/createCovariateSettings.html).
-4. Run the study using `extras/CodeToRun.R`. Its essential configuration and
-   stage call are shown below:
+4. Run the study using `extras/CodeToRun.R`.
+
+   Before executing, you can set environmental variables by uncommenting `usethis::edit_r_environ(scope = "project")` can paste the environment settings as given in `env.example`.
 
    ```r
    library(SparseMatrix)
@@ -171,7 +146,6 @@ How to run
    The cohort stage drops and recreates the entire configured cohort table.
    Always use a study-specific writable table. Set an individual stage flag to
    `FALSE` only when its required artifact already exists.
-
 5. Optionally create the patient-level long-format CSV and print a validated
    sparse-matrix summary:
 
@@ -240,7 +214,7 @@ SparseMatrix/
 ```
 
 License
-========
+=======
 
 The SparseMatrix package is licensed under the Apache License 2.0.
 

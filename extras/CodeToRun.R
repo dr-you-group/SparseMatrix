@@ -1,3 +1,7 @@
+# Below codes creates .Renviron for setting environmental variables. Uncomment and execute to create.
+#usethis::edit_r_environ(scope = "project")
+
+# Import SparseMatrix library
 library(SparseMatrix)
 
 # Use a local disk with enough capacity for Andromeda temporary files.
