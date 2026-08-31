@@ -52,7 +52,6 @@ RUN R -e "DatabaseConnector::downloadJdbcDrivers(dbms = 'sql server',pathToDrive
 RUN R -e "DatabaseConnector::downloadJdbcDrivers(dbms = 'oracle',pathToDriver = '/home/rstudio/jdbc')"
 RUN R -e "DatabaseConnector::downloadJdbcDrivers(dbms = 'spark',pathToDriver = '/home/rstudio/jdbc')"
 
-# install SparseMatrix package
-COPY . /opt/SparseMatrix
-RUN R -e "devtools::install('/opt/SparseMatrix', dependencies = FALSE)" && \
+# Install the SparseMatrix package from the public GitHub repository.
+RUN R -e "devtools::install_github('dr-you-group/SparseMatrix', ref = 'main', dependencies = FALSE)" && \
     R -e "stopifnot(requireNamespace('SparseMatrix', quietly = TRUE))"
