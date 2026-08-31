@@ -11,11 +11,7 @@ Set these variables before running the study:
 - `SPARSE_MATRIX_OUTPUT_FOLDER`: study artifact folder.
 - `SPARSE_MATRIX_DB_SERVER`, `SPARSE_MATRIX_DB_PORT`: SQL Server location.
 - `SPARSE_MATRIX_DB_USER`, `SPARSE_MATRIX_DB_PASSWORD`: SQL credentials.
-- `SPARSE_MATRIX_CDM_DATABASE_SCHEMA`: OMOP CDM schema.
-- `SPARSE_MATRIX_COHORT_DATABASE_SCHEMA`: writable cohort schema.
-
-`SPARSE_MATRIX_COHORT_TABLE` defaults to `cohort`, and
-`SPARSE_MATRIX_BATCH_SIZE` defaults to `1000000`.
+- `SPARSE_MATRIX_BATCH_SIZE` defaults to `1000000`.
 
 ## Covariates
 
