@@ -11,7 +11,7 @@ RUN R -e "install.packages('rJava', dependencies = TRUE)"
 # install devtools
 RUN apt-get update
 RUN apt-get install -y \
-    build-essential \ 
+    build-essential \
     libcurl4-gnutls-dev \
     libxml2-dev \
     libssl-dev \
@@ -51,3 +51,8 @@ RUN R -e "DatabaseConnector::downloadJdbcDrivers(dbms = 'redshift',pathToDriver 
 RUN R -e "DatabaseConnector::downloadJdbcDrivers(dbms = 'sql server',pathToDriver = '/home/rstudio/jdbc')"
 RUN R -e "DatabaseConnector::downloadJdbcDrivers(dbms = 'oracle',pathToDriver = '/home/rstudio/jdbc')"
 RUN R -e "DatabaseConnector::downloadJdbcDrivers(dbms = 'spark',pathToDriver = '/home/rstudio/jdbc')"
+
+# install SparseMatrix package
+COPY . /opt/SparseMatrix
+RUN R -e "devtools::install('/opt/SparseMatrix', dependencies = FALSE)" && \
+    R -e "stopifnot(requireNamespace('SparseMatrix', quietly = TRUE))"
